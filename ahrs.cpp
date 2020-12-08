@@ -1,5 +1,5 @@
-/*
- *	Copyright 2020 Robin Lilja <robin.lilja@gmail.com>
+/**
+ *  Copyright 2020 Robin Lilja <robin.lilja@gmail.com>
  *
  *  Created on: Jun 26, 2015
  *      Author: Robin Lilja

@@ -1,5 +1,5 @@
-/*
- *	Copyright 2020 Robin Lilja <robin.lilja@gmail.com>
+/**
+ *  Copyright 2020 Robin Lilja <robin.lilja@gmail.com>
  *
  *  Created on: Jun 26, 2015
  *      Author: Robin Lilja
@@ -9,13 +9,13 @@
 #ifndef _AHRS_EKF_H_
 #define _AHRS_EKF_H_
 
-#include <cmath>      	// std::sqrt()
+#include <cmath>        // std::sqrt()
 
-#define AHRS_UNROLLED	///< Makes the filter to unroll the matrix calculations
+#define AHRS_UNROLLED   ///< Makes the filter to unroll the matrix calculations
 
 namespace AHRS {
 
-static constexpr double AHRS_SAFE_EPSILON = 1e-9;
+static constexpr double AHRS_SAFE_EPSILON = 1e-9;   ///< Make sure we avoid division by zero
 
 /** 
  * Attitude Heading Reference System implemented by an Extended Kalman Filter. 
