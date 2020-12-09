@@ -9,7 +9,7 @@
 #ifndef _AHRS_EKF_H_
 #define _AHRS_EKF_H_
 
-#include <cmath>        // std::sqrt()
+#include <cmath>        // std::sqrt(), std::sin(), std::cos()
 
 #define AHRS_UNROLLED   ///< Makes the filter to unroll the matrix calculations
 
@@ -18,7 +18,7 @@ namespace AHRS {
 static constexpr double AHRS_SAFE_EPSILON = 1e-9;   ///< Make sure we avoid division by zero
 
 /** 
- * Attitude Heading Reference System implemented by an Extended Kalman Filter. 
+ * Attitude and Heading Reference System implemented by an Extended Kalman Filter. 
  */
 template <typename T>
 class AHRS {
@@ -28,25 +28,28 @@ public:
 	/**
 	 * Constructor.
 	 * 
-	 * \param Q_attitude attitude quaternion process covariance
-	 * \param Q_bias gyro bias process covariance
-	 * \param R_acc accelerometer measurement covariance
-	 * \param R_mag magnetometer measurement covariance
+	 * \param Qattitude attitude quaternion process covariance
+	 * \param Qbias gyro bias process covariance
+	 * \param Racc accelerometer measurement covariance
+	 * \param Rmag magnetometer measurement covariance
 	 */
-	AHRS<T>(const T &Q_attitude, const T &Q_bias, const T &R_acc, const T &R_mag) {
+	AHRS<T>(const T &Qattitude, const T &Qbias, const T &Racc, const T &Rmag, const T &declination = 0.0) {
 
-		// Make sure initial quaternion is a valid
+		// Make sure initial quaternion is valid
 		m_q0 = 1.0;
 		m_q1 = m_q2 = m_q3 = 0.0;
 
 		// Assume no bias at start
 		m_bwx = m_bwy = m_bwz = 0.0;
 
-		m_Qa = Q_attitude;
-		m_Qb = Q_bias;
+		m_Qa = Qattitude;
+		m_Qb = Qbias;
 
-		m_Ra = R_acc;
-		m_Rm = R_mag;
+		m_Ra = Racc;
+		m_Rm = Rmag;
+
+		m_dsin = std::sin(declination);
+		m_dcos = std::cos(declination);
 	};
 
 	/**
@@ -126,6 +129,16 @@ public:
 	 * Magnetometer measurement noise covariance.
 	 */
 	T m_Rm;
+
+	/**
+	 * Magnetic declination sin() component.
+	 */
+	T m_dsin;
+
+	/**
+	 * Magnetic declination cos() component.
+	 */
+	T m_dcos; 
 
 private:
 
